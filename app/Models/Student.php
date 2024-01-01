@@ -10,7 +10,7 @@ class Student extends Model
     use HasFactory;
 
 
-    public $table="student";
+    public $table="students";
 
     protected $fillable =array("*");
 
