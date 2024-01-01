@@ -29,14 +29,14 @@ class StudentController extends Controller
     public function store(Request $request)
     {
 
-        $inputs=$request->input();
+        $student = Student::create([
+            'name' => $request->input('name'),
+            'last_name' => $request->input('last_name'),
+            'photo' => $request->input('photo'),
+        ]);
 
-        $respuesta=Student::created($inputs);
-
-        return $respuesta;
-
-        dd($respuesta);
-        
+        // Devolver una respuesta JSON
+        return response()->json(['message' => 'Student created successfully', 'data' => $student], 201);
     }
 
     /**
@@ -60,7 +60,12 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $student = Student::create([
+            'name' => $request->input('name'),
+            'last_name' => $request->input('last_name'),
+            'photo' => $request->input('photo'),
+        ]);
     }
 
     /**
