@@ -21,7 +21,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -34,7 +34,7 @@ class StudentController extends Controller
         $request->validate([
             'name' => 'required|string',
             'last_name' => 'required|string',
-            'photo' => 'required|string', // Ejemplo de validación de imagen
+            'photo' => 'required|string', 
         ]);
 
         $student = Student::create([
@@ -44,7 +44,7 @@ class StudentController extends Controller
         ]);
 
         // Devolver una respuesta JSON
-        return response()->json(['message' => 'Student created successfully', 'data' => $student], 201);
+        return response()->json(['message' => 'Student created successfully', 'data' => $student]);
     }
 
     /**
@@ -54,10 +54,10 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
 
-        if(isset($student)){
-            return response()->json(['message' => 'Student found', 'data' => $student], 201);
-        }else{
-            return response()->json(['message' => 'Student no found', ], 404);
+        if (isset($student)) {
+            return response()->json(['message' => 'Student found', 'data' => $student]);
+        } else {
+            return response()->json(['message' => 'Student no found']);
         }
     }
 
@@ -80,11 +80,11 @@ class StudentController extends Controller
             'photo' => 'required|string',
         ]);
 
-        $student = Student::findOrFail($id);
+        $student = Student::find($id);
         // Actualizar los campos del estudiante
 
         if (!$student) {
-            return response()->json(['message' => 'Student no found', 'error' => true], 404);
+            return response()->json(['message' => 'Student no found']);
         } else {
             $student->update([
                 'name' => $request->input('name'),
@@ -93,7 +93,7 @@ class StudentController extends Controller
                 // Puedes actualizar más campos según tus necesidades
             ]);
 
-            return response()->json(['message' => 'Student update successfully', 'data' => $student], 201);
+            return response()->json(['message' => 'Student update successfully', 'data' => $student]);
         }
     }
 
@@ -102,6 +102,14 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
+        $student = Student::find($id);
+
+        if (!$student) {
+            return response()->json(['message' => 'Student no found']);
+        } else {
+            $student->delete();
+            return response()->json(['message' => 'Student delete successfully', 'data' => $student]);
+        }
     }
 }
