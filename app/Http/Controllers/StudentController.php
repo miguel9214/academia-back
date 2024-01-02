@@ -57,7 +57,7 @@ class StudentController extends Controller
         if (isset($student)) {
             return response()->json(['message' => 'Student found', 'data' => $student]);
         } else {
-            return response()->json(['message' => 'Student no found']);
+            return response()->json(['message' => 'Student not found']);
         }
     }
 
@@ -84,7 +84,7 @@ class StudentController extends Controller
         // Actualizar los campos del estudiante
 
         if (!$student) {
-            return response()->json(['message' => 'Student no found']);
+            return response()->json(['message' => 'Student not found']);
         } else {
             $student->update([
                 'name' => $request->input('name'),
@@ -106,7 +106,7 @@ class StudentController extends Controller
         $student = Student::find($id);
 
         if (!$student) {
-            return response()->json(['message' => 'Student no found']);
+            return response()->json(['message' => 'Student not found']);
         } else {
             $student->delete();
             return response()->json(['message' => 'Student delete successfully', 'data' => $student]);

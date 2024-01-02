@@ -32,24 +32,26 @@ class UserController extends Controller
         $request->validate(
             [
                 'name' => 'required|string',
+                'last_name' => 'required|string',
                 'email' => 'required|email',
-                'password' => 'required|confirmed',
+                'password' => 'required|string',
             ]
         );
 
         $user = User::create(
             [
                 'name' => $request->input('name'),
+                'last_name' => $request->input('last_name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('passowrd')),
 
             ]
         );
-        
-        if(isset($user)){
+
+        if (isset($user)) {
             return response()->json(['message' => 'User created successfully', 'data' => $user]);
-        }else{
-            return response()->json(['message' => 'User no created']);
+        } else {
+            return response()->json(['message' => 'User not created']);
         }
     }
 
@@ -58,7 +60,13 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json(['message' => 'User found', 'data' => $user]);
+        } else {
+            return response()->json(['message' => 'User not found']);
+        }
     }
 
     /**
@@ -74,7 +82,34 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate(
+            [
+                'name' => 'required|string',
+                'last_name' => 'required|string',
+                'email' => 'required|email',
+                'password' => 'required|string',
+            ]
+        );
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found']);
+        } else {
+
+            $user->update(
+                [
+                    'name' => $request->input('name'),
+                    'last_name' => $request->input('last_name'),
+                    'email' => $request->input('email'),
+                    'password' => Hash::make($request->input('passowrd')),
+
+                ]
+            );
+            return response()->json(['message' => 'User update successfully', 'data' => $user]);
+
+
+        }
     }
 
     /**
@@ -82,6 +117,13 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if(!$user){
+            return response()->json(['message' => 'User not found']);
+        }else{
+            $user->delete();
+            return response()->json(['message' => 'User delate successfully', 'data' => $user]);
+        }
     }
 }
