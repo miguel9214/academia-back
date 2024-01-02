@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,13 @@ class StudentController extends Controller
     public function store(Request $request)
     {
 
+        // Validar los datos de la solicitud
+        $request->validate([
+            'name' => 'required|string',
+            'last_name' => 'required|string',
+            'photo' => 'required|string', // Ejemplo de validación de imagen
+        ]);
+
         $student = Student::create([
             'name' => $request->input('name'),
             'last_name' => $request->input('last_name'),
@@ -44,7 +52,13 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $student = Student::find($id);
+
+        if(isset($student)){
+            return response()->json(['message' => 'Student found', 'data' => $student], 201);
+        }else{
+            return response()->json(['message' => 'Student no found', ], 404);
+        }
     }
 
     /**
@@ -60,12 +74,27 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
-        $student = Student::create([
-            'name' => $request->input('name'),
-            'last_name' => $request->input('last_name'),
-            'photo' => $request->input('photo'),
+        $request->validate([
+            'name' => 'required|string',
+            'last_name' => 'required|string',
+            'photo' => 'required|string',
         ]);
+
+        $student = Student::findOrFail($id);
+        // Actualizar los campos del estudiante
+
+        if (!$student) {
+            return response()->json(['message' => 'Student no found', 'error' => true], 404);
+        } else {
+            $student->update([
+                'name' => $request->input('name'),
+                'last_name' => $request->input('last_name'),
+                'photo' => $request->input('photo'),
+                // Puedes actualizar más campos según tus necesidades
+            ]);
+
+            return response()->json(['message' => 'Student update successfully', 'data' => $student], 201);
+        }
     }
 
     /**
