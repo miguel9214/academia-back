@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 class CourseController extends Controller
 {
@@ -11,7 +13,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        return Course::all();
     }
 
     /**
@@ -27,7 +29,23 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'number_hours' => 'required|numeric',
+        ]);
+
+
+        $course = Course::created([
+            'name' => $request->input('name'),
+            'number_hours' => $request->input('number_hours'),
+        ]);
+
+        if ($course) {
+
+            response()->json(['message', 'Course created successfully']);
+        } else {
+            response()->json(['message', 'Course not created']);
+        }
     }
 
     /**
@@ -35,7 +53,13 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $course=Course::find($id);
+
+        if($course){
+            response()->json(['message','Course found','data'=>$course]);
+        }else{
+            response()->json(['message','Course not found']);
+        }
     }
 
     /**
