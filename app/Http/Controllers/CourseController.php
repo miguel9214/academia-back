@@ -75,6 +75,10 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        $request->validate([
+
+        ]);
         //
     }
 
@@ -83,6 +87,16 @@ class CourseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $course=Course::find($id);
+
+        if(!$course){
+            response()->json(['message','Course not found']);
+        }else{
+            $course->delete();
+            response()->json(['message','Course deleted successfully']);
+        }
+
+
+        
     }
 }
